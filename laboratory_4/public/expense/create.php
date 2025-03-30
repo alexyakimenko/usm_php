@@ -10,6 +10,16 @@ $pageName = 'Expense';
 
 $tags = configGet('expense.tags');
 
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    require_once ROOT_DIR . 'src/handlers/handle_expense.php';
+
+    $errors = handle_expense($_POST);
+    if(empty($errors)) {
+        header('Location: /');
+        exit();
+    }
+}
+
 ?>
 
 <?php require_once ROOT_DIR . 'src/layout/header.php' ?>

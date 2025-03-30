@@ -1,0 +1,79 @@
+[
+    {
+        "name": "Обед в кафе",
+        "amount": "15",
+        "type": "expense",
+        "tags": ["food", "shopping"],
+        "description": "Ланч с коллегами"
+    },
+    {
+        "name": "Зарплата",
+        "amount": "200",
+        "type": "income",
+        "tags": ["salary"],
+        "description": "Авансовый платеж"
+    },
+    {
+        "name": "Оплата интернета",
+        "amount": "50",
+        "type": "expense",
+        "tags": ["bills", "utilities"],
+        "description": "Месячный тариф"
+    },
+    {
+        "name": "Покупка лекарств",
+        "amount": "30",
+        "type": "expense",
+        "tags": ["healthcare"],
+        "description": "Витамины и анальгетики"
+    },
+    {
+        "name": "Годовая премия",
+        "amount": "500",
+        "type": "income",
+        "tags": ["bonus"],
+        "description": "Поощрение за хорошую работу"
+    },
+    {
+        "name": "Покупка одежды",
+        "amount": "75",
+        "type": "expense",
+        "tags": ["shopping"],
+        "description": "Футболка и джинсы"
+    },
+    {
+        "name": "Поход в кино",
+        "amount": "120",
+        "type": "expense",
+        "tags": ["entertainment"],
+        "description": "Билеты на фильм"
+    },
+    {
+        "name": "Продукты на неделю",
+        "amount": "90",
+        "type": "expense",
+        "tags": ["food"],
+        "description": "Фрукты, овощи, мясо"
+    },
+    {
+        "name": "Дивиденды от инвестиций",
+        "amount": "350",
+        "type": "income",
+        "tags": ["investment"],
+        "description": "Выплата по акциям"
+    },
+    {
+        "name": "Такси до работы",
+        "amount": "40",
+        "type": "expense",
+        "tags": ["transportation"],
+        "description": "Утренний трансфер"
+    },
+    {
+        "name": "Такси до работы",
+        "amount": "40",
+        "type": "expense",
+        "tags": ["transportation"],
+        "description": "Утренний трансфер"
+    }
+]
