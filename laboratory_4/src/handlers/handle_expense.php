@@ -59,6 +59,17 @@ function validate_field(mixed $value, array $rules): ?string {
     return null;
 }
 
+function filter_filed(mixed $value, array $rules): mixed {
+    if (isset($rules['type'])) {
+        return match ($rules['type']) {
+            'integer' => (int)$value,
+            'string' => htmlspecialchars(trim($value)),
+            default => $value,
+        };
+    }
+    return $value;
+}
+
 /**
  * Handle an expense entry.
  *
@@ -67,11 +78,9 @@ function validate_field(mixed $value, array $rules): ?string {
  */
 function handle_expense(array $expense): ?array {
     $errors = [];
-    foreach ($expense as $field => $value) {
+    foreach ($expense as $field => &$value) {
         if (isset(rules[$field])) {
-            if (rules[$field]['type'] === 'integer') {
-                $value = (int)$value;
-            }
+            $value = filter_filed($value, rules[$field]);
             $error = validate_field($value, rules[$field]);
             if ($error) {
                 $errors[$field] = $error;
