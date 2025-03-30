@@ -3,9 +3,12 @@
 require_once '../../src/helpers/config.php';
 
 configLoad('app.php');
+configLoad('expense.php');
 
 $projectName = configGet('app.name');
 $pageName = 'Expense';
+
+$tags = configGet('expense.tags');
 
 ?>
 
