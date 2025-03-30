@@ -36,25 +36,24 @@ const rules = [
 /**
  * Validate a field against a set of rules.
  *
- * @param string $field The name of the field.
  * @param mixed $value The value of the field.
- * @param array $rule The validation rules for the field.
+ * @param array $rules The validation rules for the field.
  * @return string|null The error message if validation fails, or null if validation passes.
  */
-function validate_field($field, $value, $rule): ?string {
-    if (isset($rule['required']) && $rule['required'] && empty($value)) {
+function validate_field(mixed $value, array $rules): ?string {
+    if (isset($rules['required']) && $rules['required'] && empty($value)) {
         return 'Поле обязательно для заполнения';
     }
-    if (isset($rule['type']) && gettype($value) !== $rule['type']) {
+    if (isset($rules['type']) && gettype($value) !== $rules['type']) {
         return 'Неверный тип данных';
     }
-    if (isset($rule['min']) && strlen($value) < $rule['min']) {
-        return 'Минимальная длина ' . $rule['min'];
+    if (isset($rules['min']) && strlen($value) < $rules['min']) {
+        return 'Минимальная длина ' . $rules['min'];
     }
-    if (isset($rule['max']) && strlen($value) > $rule['max']) {
-        return 'Максимальная длина ' . $rule['max'];
+    if (isset($rules['max']) && strlen($value) > $rules['max']) {
+        return 'Максимальная длина ' . $rules['max'];
     }
-    if (isset($rule['in']) && !in_array($value, $rule['in'])) {
+    if (isset($rules['in']) && !in_array($value, $rules['in'])) {
         return 'Недопустимое значение';
     }
     return null;
@@ -67,15 +66,13 @@ function validate_field($field, $value, $rule): ?string {
  * @return array|null An array of errors if validation fails, or null if successful.
  */
 function handle_expense(array $expense): ?array {
-    global $tags;
-
     $errors = [];
     foreach ($expense as $field => $value) {
         if (isset(rules[$field])) {
             if (rules[$field]['type'] === 'integer') {
                 $value = (int)$value;
             }
-            $error = validate_field($field, $value, rules[$field]);
+            $error = validate_field($value, rules[$field]);
             if ($error) {
                 $errors[$field] = $error;
             }
