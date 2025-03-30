@@ -1,11 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Tracker - History</title>
-</head>
-<body>
+<?php
 
-</body>
-</html>
+require_once '../../src/helpers/config.php';
+
+configLoad('app.php');
+
+$projectName = configGet('app.name');
+$pageName = 'History';
+
+?>
+
+<?php require_once ROOT_DIR . 'src/layout/header.php' ?>
+
+<?php require_once ROOT_DIR . 'src/pages/history.php' ?>
+
+<?php require_once ROOT_DIR . 'src/layout/footer.php' ?>

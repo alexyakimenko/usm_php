@@ -1,11 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Tracker</title>
-</head>
-<body>
-    
-</body>
-</html>
+<?php
+
+require_once '../src/helpers/config.php';
+
+configLoad('app.php');
+
+$projectName = configGet('app.name');
+$pageName = 'Home';
+
+?>
+
+<?php require_once ROOT_DIR . 'src/layout/header.php' ?>
+
+<?php require_once ROOT_DIR . 'src/pages/home.php' ?>
+
+<?php require_once ROOT_DIR . 'src/layout/footer.php' ?>
