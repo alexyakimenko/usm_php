@@ -4,6 +4,13 @@ namespace App\Core\Validation;
 
 class InputHandler
 {
+    /**
+     * Filters a single field based on the provided rules.
+     *
+     * @param mixed $value The value to be filtered.
+     * @param array $rules The rules to apply for filtering.
+     * @return mixed The filtered value or null if no rules are applied.
+     */
     public static function filterField(mixed $value, array $rules): mixed {
         if(isset($rules['type'])) {
             return match($rules['type']) {
@@ -15,6 +22,13 @@ class InputHandler
         return null;
     }
 
+    /**
+     * Validates a single field based on the provided rules.
+     *
+     * @param mixed $value The value to be validated.
+     * @param array $rules The rules to apply for validation.
+     * @return string|null An error message if validation fails, or null if it passes.
+     */
     public static function validateField(mixed $value, array $rules): ?string {
         if (isset($rules['required']) && $rules['required'] && empty($value)) {
             return 'Поле обязательно для заполнения';
@@ -34,6 +48,13 @@ class InputHandler
         return null;
     }
 
+    /**
+     * Validates an array of data based on the provided rules.
+     *
+     * @param array $data The data to be validated.
+     * @param array $rules The validation rules for each field.
+     * @return array|null An array of errors if validation fails, or null if it passes.
+     */
     public static function validate(array $data, array $rules): ?array {
         $errors = [];
         foreach ($data as $key => $value) {
@@ -52,6 +73,13 @@ class InputHandler
         return null;
     }
 
+    /**
+     * Filters an array of data based on the provided rules.
+     *
+     * @param array $data The data to be filtered.
+     * @param array $rules The filtering rules for each field.
+     * @return array The filtered data.
+     */
     public static function filter(array $data, array $rules): array {
         $result = [];
         foreach ($data as $key => $value) {

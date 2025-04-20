@@ -3,6 +3,11 @@
 namespace App\Models;
 
 class Recipe {
+    /**
+     * Returns the validation rules for the Recipe model.
+     *
+     * @return array The validation rules for each field in the recipe.
+     */
     public static function rules(): array {
         return [
             'title' => [
