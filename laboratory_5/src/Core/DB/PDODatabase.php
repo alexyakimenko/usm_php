@@ -2,22 +2,36 @@
 
 namespace App\Core\DB;
 
+use App\Core\Config;
 use PDO;
 use PDOException;
 
 class PDODatabase
 {
-    private PDO $connection;
+    private static PDO $connection;
+
+    public static function load(): void {
+        $driver = Config::get('db.driver');
+        $host = Config::get('db.host');
+        $port = Config::get('db.port');
+        $dbname = Config::get('db.database');
+        $username = Config::get('db.username');
+        $password = Config::get('db.password');
+
+        $dsn = "$driver:host=$host;port=$port;dbname=$dbname";
+
+        self::connect($dsn, $username, $password);
+    }
 
     /**
      * Constructor - establishes connection to PDO database
      *
      * @param string $dsn Path to PDO database
      */
-    public function __construct(string $dsn, string $username, string $password) {
+    public static function connect(string $dsn, string $username, string $password): void {
         try {
-            $this->connection = new PDO($dsn, $username, $password);
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            self::$connection = new PDO($dsn, $username, $password);
+            self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             die("Database connection error: " . $e->getMessage());
         }
@@ -29,10 +43,10 @@ class PDODatabase
      * @param string $sql SQL query to execute
      * @return bool Success status
      */
-    public function Execute(string $sql): bool
+    public static function Execute(string $sql): bool
     {
         try {
-            $statement = $this->connection->prepare($sql);
+            $statement = self::$connection->prepare($sql);
             return $statement->execute();
         } catch (PDOException $e) {
             die("Query execution error: " . $e->getMessage());
@@ -45,10 +59,10 @@ class PDODatabase
      * @param string $sql SQL query to execute
      * @return array Result data
      */
-    public function Fetch(string $sql): array
+    public static function Fetch(string $sql): array
     {
         try {
-            $statement = $this->connection->prepare($sql);
+            $statement = self::$connection->prepare($sql);
             $statement->execute();
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -63,21 +77,21 @@ class PDODatabase
      * @param array $data Associative array of column => value pairs
      * @return int|bool ID of created record or false on failure
      */
-    public function Create(string $table, array $data): false|int
+    public static function Create(string $table, array $data): false|int
     {
         try {
             $columns = implode(", ", array_keys($data));
             $placeholders = ":" . implode(", :", array_keys($data));
 
             $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
-            $statement = $this->connection->prepare($sql);
+            $statement = self::$connection->prepare($sql);
 
             foreach ($data as $key => $value) {
                 $statement->bindValue(":$key", $value);
             }
 
             $statement->execute();
-            return $this->connection->lastInsertId();
+            return self::$connection->lastInsertId();
         } catch (PDOException $e) {
             die("Create record error: " . $e->getMessage());
         }
@@ -88,13 +102,13 @@ class PDODatabase
      *
      * @param string $table Table name
      * @param int $id Record ID
-     * @return array|bool Record data or false if not found
+     * @return array|bool|null Record data or false if not found
      */
-    public function Read(string $table, int $id): bool|array|null
+    public static function Read(string $table, int $id): bool|array|null
     {
         try {
             $sql = "SELECT * FROM $table WHERE id = :id LIMIT 1";
-            $statement = $this->connection->prepare($sql);
+            $statement = self::$connection->prepare($sql);
             $statement->bindValue(":id", $id);
             $statement->execute();
 
@@ -113,7 +127,7 @@ class PDODatabase
      * @param array $data Associative array of column => value pairs
      * @return bool Success status
      */
-    public function Update(string $table, int $id, array $data): bool
+    public static function Update(string $table, int $id, array $data): bool
     {
         try {
             $setParts = [];
@@ -123,7 +137,7 @@ class PDODatabase
             $setClause = implode(", ", $setParts);
 
             $sql = "UPDATE $table SET $setClause WHERE id = :id";
-            $statement = $this->connection->prepare($sql);
+            $statement = self::$connection->prepare($sql);
 
             $statement->bindValue(":id", $id);
             foreach ($data as $key => $value) {
@@ -143,11 +157,11 @@ class PDODatabase
      * @param int $id Record ID
      * @return bool Success status
      */
-    public function Delete(string $table, int $id): bool
+    public static function Delete(string $table, int $id): bool
     {
         try {
             $sql = "DELETE FROM $table WHERE id = :id";
-            $statement = $this->connection->prepare($sql);
+            $statement = self::$connection->prepare($sql);
             $statement->bindValue(":id", $id);
 
             return $statement->execute();
@@ -162,11 +176,11 @@ class PDODatabase
      * @param string $table Table name
      * @return int Number of records
      */
-    public function Count(string $table): int
+    public static function Count(string $table): int
     {
         try {
             $sql = "SELECT COUNT(*) as count FROM $table";
-            $statement = $this->connection->prepare($sql);
+            $statement = self::$connection->prepare($sql);
             $statement->execute();
 
             $result = $statement->fetch(PDO::FETCH_ASSOC);

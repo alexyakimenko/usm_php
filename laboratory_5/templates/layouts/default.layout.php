@@ -23,7 +23,7 @@ use App\Core\Config;
         <div><?= Config::get('app.name') ?></div>
     </a>
 </header>
-<main class="container mx-auto p-4">
+<main class="container mx-auto px-4">
     <?php echo $content; ?>
 </main>
 
